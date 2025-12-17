@@ -1,12 +1,13 @@
 {
   "name": "teltonika-codec-parser",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "decoder for buffers of teltonika codec 8, 8E and 16, UDP/TCP packages",
   "scripts": {
     "build": "tsc --build --clean && rm dist/index.d.ts -f && tsc",
     "test": "ts-node test/test.ts",
     "publish": "npm run build && npm publish"
   },
+  "homepage": "https://github.com/augusto-sb/node-teltonika-codec-parser",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "module": "./dist/index.mjs",
