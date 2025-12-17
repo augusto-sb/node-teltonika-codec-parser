@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc --build --clean && rm dist/index.d.ts -f && tsc",
     "test": "ts-node test/test.ts",
-    "publish": "npm run build && npm publish"
+    "publish-script": "npm run build && npm publish"
   },
   "homepage": "https://github.com/augusto-sb/node-teltonika-codec-parser",
   "main": "./dist/index.js",
