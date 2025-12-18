@@ -1,6 +1,6 @@
 {
   "name": "teltonika-codec-parser",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "decoder for buffers of teltonika codec 8, 8E and 16, UDP/TCP packages",
   "scripts": {
     "build": "tsc --build --clean && rm dist/index.d.ts -f && tsc",
@@ -31,5 +31,8 @@
     "@types/node": "^25.0.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  }
+  },
+  "files": [
+    "dist/"
+  ]
 }
