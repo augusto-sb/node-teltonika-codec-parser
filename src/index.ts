@@ -37,13 +37,13 @@ export type Result = {
   udpOnly?: UdpOnly;
 };
 
-function SliceToHex(input: Buffer): string {
+/*function SliceToHex(input: Buffer): string {
   return input
     .map(
       (x) => (String(Math.floor(x / 16)) + String(x % 16)) as unknown as number,
     )
     .join('');
-}
+}*/
 
 function AnyBytesToNumber(input: Buffer): number {
   let res = 0n;
@@ -120,7 +120,14 @@ export function Parser(codec: Codec, over: Protocol, buffer: Buffer): Result {
     if (imeiLength !== 15) {
       throw new Error('imeiLength err');
     }
-    const imei = SliceToHex(buffer.slice(8, 8 + imeiLength));
+
+    const imei = buffer.slice(8, 8 + imeiLength).map(x => {
+      const unpadded = x & 15; // padded with 3s in hex
+      if(unpadded > 9){
+        console.warn('imei unpadded error');
+      }
+      return unpadded;
+    }).join('');
     codecIdtoNumberOfData2 = buffer.slice(8 + imeiLength);
     udpOnly = {
       packetId,
@@ -152,12 +159,9 @@ export function Parser(codec: Codec, over: Protocol, buffer: Buffer): Result {
   );
   const avl: AvlData[] = [];
 
-  const avlRecordSize = avlBytes.length / numberOfData1;
+  let offset = 0;
   for (let r = 0; r < numberOfData1; r++) {
-    const avlRecordBytes = avlBytes.slice(
-      r * avlRecordSize,
-      avlRecordSize * (r + 1),
-    );
+    const avlRecordBytes = avlBytes.slice(offset);
     const timestamp = AnyBytesToNumber(avlRecordBytes.slice(0, 8));
 /*
 Priority
@@ -177,8 +181,8 @@ Angle – degrees from north pole.
 Satellites – number of satellites in use.
 Speed – speed calculated from satellites.
     */
-    const longitude = int32TwosComplement(AnyBytesToNumber(avlRecordBytes.slice(9, 13))) / 7;
-    const latitude = int32TwosComplement(AnyBytesToNumber(avlRecordBytes.slice(13, 17))) / 7;
+    const longitude = int32TwosComplement(AnyBytesToNumber(avlRecordBytes.slice(9, 13))) / 10000000;
+    const latitude = int32TwosComplement(AnyBytesToNumber(avlRecordBytes.slice(13, 17))) / 10000000;
 /*
 longitude and latitude: 7 0's precision = p * (d + m/60 + s/3600 + ms/3600000)
 2s complement
@@ -255,6 +259,7 @@ Value   Record Created
         NX--;
       }
     }
+    offset += j;
     if (NOfTotalId !== Object.keys(io).length) {
       throw new Error('NOfTotalId !== Object.keys(io).length !!!');
     }

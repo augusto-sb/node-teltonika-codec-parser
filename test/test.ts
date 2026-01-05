@@ -116,7 +116,7 @@ const tests: {
 			],
 			udpOnly: {
 				avlPacketId: 5,
-				imei: '333532303933303836343033363535',
+				imei: '352093086403655', // '333532303933303836343033363535',
 				packetId: 51966,
 				packetLength: 61,
 			},
@@ -176,7 +176,7 @@ const tests: {
 			],
 			udpOnly: {
 				avlPacketId: 7,
-				imei: '333532303933303836343033363535',
+				imei: '352093086403655', // '333532303933303836343033363535',
 				packetId: 51966,
 				packetLength: 95
 			}
@@ -255,7 +255,7 @@ const tests: {
 			],
 			udpOnly: {
 				avlPacketId: 1,
-				imei: '333532303934303835323331353932',
+				imei: '352094085231592', // '333532303934303835323331353932',
 				packetId: 51966,
 				packetLength: 72
 			}
@@ -265,5 +265,8 @@ const tests: {
 
 for(const test of tests){
 	const res = Parser(test.codec, test.over, Buffer.from(test.mainPkg, 'hex'))
+	/*if(res.udpOnly){
+		console.log(res.udpOnly.imei.split('').filter((val, index)=>{return index % 2 === 1;}).join(''))
+	}*/
 	deepStrictEqual(res, test.expected);
 }
