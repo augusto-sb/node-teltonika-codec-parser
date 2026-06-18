@@ -121,13 +121,7 @@ export function Parser(codec: Codec, over: Protocol, buffer: Buffer): Result {
       throw new Error('imeiLength err');
     }
 
-    const imei = buffer.slice(8, 8 + imeiLength).map(x => {
-      const unpadded = x & 15; // padded with 3s in hex
-      if(unpadded > 9){
-        console.warn('imei unpadded error');
-      }
-      return unpadded;
-    }).join('');
+    const imei = buffer.slice(8, 8 + imeiLength).toString('ascii');
     codecIdtoNumberOfData2 = buffer.slice(8 + imeiLength);
     udpOnly = {
       packetId,
